@@ -85,25 +85,33 @@
           <div class="row">
             <div class="col-md-9 mx-auto">
               <div class="contact-form">
-                <form action="">
+                <div id="error_msg" style="background: #fe8b8e; padding: 0px; margin-bottom: 20px; text-align: center; font-size: 14px; transition: all 0.5s ease;"></div>
+                <div id="succ_msg" style="display: none; background: #236e14bd; padding: 0px; margin-bottom: 20px; text-align: center; font-size: 14px; transition: all 0.5s ease;"><p id="success_msg1" style="padding-bottom: 0%; font-size: large; font-weight: bold; color: white;"></p><br><p id="success_msg2" style="padding-top: 0%; padding-bottom: 0%; font-size: large; font-weight: bold; color: white;"></p></div>
+
+                <div>
                   <div>
-                    <input type="text" placeholder="Full Name " />
+                    <input type="text" placeholder="Full Name" id="full_Names" />
                   </div>
                   <div>
-                    <input type="text" placeholder="Phone Number" />
+                    <input type="text" placeholder="Phone Number" id="phone_number" />
                   </div>
                   <div>
-                    <input type="email" placeholder="Email Address" />
+                    <input type="email" placeholder="Email Address" id="email"/>
                   </div>
                   <div>
-                    <input type="text" placeholder="Message" class="input_message" />
+                    <input
+                      type="text"
+                      placeholder="Message"
+                      class="input_message"
+                      id="input_message"
+                    />
                   </div>
                   <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn_on-hover">
+                    <button onclick="validateForm()" class="btn_on-hover">
                       Send message
                     </button>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
@@ -161,6 +169,72 @@
     function closeNav() {
       document.getElementById("myNav").style.width = "0%";
     }
+    const isValidEmail = email => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+function validateForm() {
+
+  var valid = true;
+
+       const grpName = document.getElementById('full_Names');
+       const grpEmail = document.getElementById('email');
+       const regNo = document.getElementById('input_message');
+       const contNo = document.getElementById('phone_number');
+       const error_msg = document.getElementById('error_msg');
+       const success_msg1 = document.getElementById('success_msg1');
+       const success_msg2 = document.getElementById('success_msg2');
+       var text;
+
+       const grpNameValue = grpName.value.trim();
+       const grpEmailValue = grpEmail.value.trim();
+       const msgValue = regNo.value.trim();
+       const contNoValue = contNo.value.trim();
+
+       document.getElementById("succ_msg").style.display = "none";
+
+       if(grpNameValue.length < 3){
+        error_msg.style.padding = "10px"
+        document.getElementById("error_msg").style.display = "block";
+       text = "Please enter a valid name!";
+       error_msg.innerHTML = text;
+        valid = false;
+       }else if(contNoValue.length < 10){
+        error_msg.style.padding = "10px"
+        document.getElementById("error_msg").style.display = "block";
+       text = "Please enter a valid phone number!";
+       error_msg.innerHTML = text;
+        valid = false;
+       }
+       else if(!isValidEmail(grpEmailValue) || grpEmailValue.length < 3) {
+        error_msg.style.padding = "10px"
+        document.getElementById("error_msg").style.display = "block";
+        text = "Please enter a valid email!!";
+        error_msg.innerHTML = text;
+        valid = false
+      } else if(msgValue.length < 3){
+        error_msg.style.padding = "10px"
+        document.getElementById("error_msg").style.display = "none";
+       text = "Please enter a valid message!";
+       error_msg.innerHTML = text;
+        valid = false;
+       }else {
+        error_msg.style.padding = "0px";
+        document.getElementById("succ_msg").style.display = "block";
+        document.getElementById("succ_msg").style.padding = "10px";
+        document.getElementById("error_msg").style.display = "none";
+        // success_msg1.style.padding = "10px"
+        // success_msg2.style.padding = "10px"
+       var text2 = "Hello! " + document.getElementById("full_Names").value + ", Thank you";
+       var text3 =  "Your message was sent successfully!";
+       success_msg1.innerHTML = text2;
+       success_msg2.innerHTML = text3
+
+       }
+ 
+  return valid; // return the valid status
+  
+}
   </script>
 
 </body>

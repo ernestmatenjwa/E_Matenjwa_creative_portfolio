@@ -145,9 +145,9 @@
 
     <!-- design section -->
 
-    <section class="design_section layout_padding-top" style="padding-top: 2%; background-color: whitesmoke;">
+    <section class="design_section layout_padding-top" style="padding-top: 5%; background-color: whitesmoke;">
       <div class="container">
-        <div class="heading_container">
+        <div class="heading_container" style="padding-bottom: 3%;">
           <h2>
             About Ernest Matenjwa
           </h2>
@@ -155,8 +155,8 @@
         <div class="box layout_padding0-top layout_padding-bottom">
           <div class="detail-box">
             <img src="images/abtPic.jpg" class="rounded-circle" style="width: 300px; display: block; margin-left: auto; margin-right: auto;" alt="Avatar" />
-            <p style="text-align: center; ">
-              I'm Ernest Matenjwa, from a small township located in Mpumalanga province called Matsulu. I graduated at TSHWANE UNIVERSITY OF TECHNOLOGY in 2021, enroled in Software development. I regard myself as a person who is fascinated by challenges in all sorts of way, work or life, that is merely based on my belief that evolving and adapting to challenges is the whole concept of being competitive and that is what i want to bring to a work place. With the less experience that i have means i have more room for improvement especially in programming languages, I have taught myself a few and i am willing to learn and be productive as a software developer.
+            <p style="text-align: center; font-weight: bolder; color: rgb(75, 72, 72);">
+              I'm Ernest Matenjwa, from a small township located in Mpumalanga province called Matsulu. I graduated at TSHWANE UNIVERSITY OF TECHNOLOGY in 2021, enroled in Software development. I regard myself as a person who is fascinated by challenges in all sorts of way, work or life, that is merely based on my belief that evolving and adapting to challenges is the whole concept of being competitive and that is what i want to bring to a work place. With the less experience that i have means i have more room for improvement especially in programming languages, I have taught myself a few and i am willing to learn and be productive as a software developer. coding is what keeps me going.
             </p>
              <div class="design_container layout_padding0">
           <div class="box b-1">
@@ -254,9 +254,11 @@
         <li class="list-group-item">I am a critical thinker</li>
         <li class="list-group-item">Attention to detail and problem solving</li>
         <li class="list-group-item">Computer literate</li>
+        <li class="list-group-item">I am a man of integrity</li>
         <li class="list-group-item">Highly motivated and organized</li>
         <li class="list-group-item">I am good at engaging with people as i learnt that during my work experience</li>
         <li class="list-group-item">Time management is also part of my planning when performing due tasks</li>
+        <li class="list-group-item">I am kind, courageous, flexible and i forgive</li>
       </ul>
       </div>
       </div>
@@ -391,29 +393,33 @@ backend.
             <div class="row">
               <div class="col-md-9 mx-auto">
                 <div class="contact-form">
-                  <form action="">
+                  <div id="error_msg" style="background: #fe8b8e; padding: 0px; margin-bottom: 20px; text-align: center; font-size: 14px; transition: all 0.5s ease;"></div>
+                  <div id="succ_msg" style="display: none; background: #236e14bd; padding: 0px; margin-bottom: 20px; text-align: center; font-size: 14px; transition: all 0.5s ease;"><p id="success_msg1" style="padding-bottom: 0%; font-size: large; font-weight: bold; color: white;"></p><br><p id="success_msg2" style="padding-top: 0%; padding-bottom: 0%; font-size: large; font-weight: bold; color: white;"></p></div>
+
+                  <div>
                     <div>
-                      <input type="text" placeholder="Full Name " />
+                      <input type="text" placeholder="Full Name" id="full_Names" />
                     </div>
                     <div>
-                      <input type="text" placeholder="Phone Number" />
+                      <input type="text" placeholder="Phone Number" id="phone_number" />
                     </div>
                     <div>
-                      <input type="email" placeholder="Email Address" />
+                      <input type="email" placeholder="Email Address" id="email"/>
                     </div>
                     <div>
                       <input
                         type="text"
                         placeholder="Message"
                         class="input_message"
+                        id="input_message"
                       />
                     </div>
                     <div class="d-flex justify-content-center">
-                      <button type="submit" class="btn_on-hover">
+                      <button onclick="validateForm()" class="btn_on-hover">
                         Send message
                       </button>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -471,6 +477,66 @@ backend.
       function closeNav() {
         document.getElementById("myNav").style.width = "0%";
       }
+      const isValidEmail = email => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+function validateForm() {
+
+  var valid = true;
+
+       const grpName = document.getElementById('full_Names');
+       const grpEmail = document.getElementById('email');
+       const regNo = document.getElementById('input_message');
+       const contNo = document.getElementById('phone_number');
+       const error_msg = document.getElementById('error_msg');
+       const success_msg1 = document.getElementById('success_msg1');
+       const success_msg2 = document.getElementById('success_msg2');
+       var text;
+
+       const grpNameValue = grpName.value.trim();
+       const grpEmailValue = grpEmail.value.trim();
+       const msgValue = regNo.value.trim();
+       const contNoValue = contNo.value.trim();
+
+       if(grpNameValue.length < 3){
+        error_msg.style.padding = "10px"
+       text = "Please enter a valid name!";
+       error_msg.innerHTML = text;
+        valid = false;
+       }else if(contNoValue.length < 10){
+        error_msg.style.padding = "10px"
+       text = "Please enter a valid phone number!";
+       error_msg.innerHTML = text;
+        valid = false;
+       }
+       else if(!isValidEmail(grpEmailValue) || grpEmailValue.length < 3) {
+        error_msg.style.padding = "10px"
+        text = "Please enter a valid email!!";
+        error_msg.innerHTML = text;
+        valid = false
+      } else if(msgValue.length < 3){
+        error_msg.style.padding = "10px"
+       text = "Please enter a valid message!";
+       error_msg.innerHTML = text;
+        valid = false;
+       }else {
+        error_msg.style.padding = "0px";
+        document.getElementById("succ_msg").style.display = "block";
+        document.getElementById("succ_msg").style.padding = "10px";
+        document.getElementById("error_msg").style.display = "none";
+        // success_msg1.style.padding = "10px"
+        // success_msg2.style.padding = "10px"
+       var text2 = "Hello! " + document.getElementById("full_Names").value + ", Thank you";
+       var text3 =  "Your message was sent successfully!";
+       success_msg1.innerHTML = text2;
+       success_msg2.innerHTML = text3
+
+       }
+ 
+  return valid; // return the valid status
+  
+}
     </script>
   </body>
 </html>
