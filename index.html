@@ -35,6 +35,44 @@
     <link href="css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="css/responsive.css" rel="stylesheet" />
+    <style>
+      .popup{
+        width: 400px;
+        background: #fff;
+        border-radius: 6px;
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.1);
+        text-align: center;
+        padding: 0 30px 30px;
+        color: #333;
+        visibility: hidden;
+        transition: transform 0.4s, top 0.4s;
+      }
+      .open-popup{
+        visibility: visible;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      .popup img{
+        width: 100px;
+        margin-top: -50px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .popup h2{
+        font-size: 38px;
+        font-weight: 500;
+        margin: 30px 0 10px;
+      }
+      .popup button{
+        width: 100%;
+        margin-top: 50px;
+        padding: 10px 0;
+        
+      }
+  </style>
   </head>
 
   <body>
@@ -394,14 +432,13 @@ backend.
               <div class="col-md-9 mx-auto">
                 <div class="contact-form">
                   <div id="error_msg" style="background: #fe8b8e; padding: 0px; margin-bottom: 20px; text-align: center; font-size: 14px; transition: all 0.5s ease;"></div>
-                  <div id="succ_msg" style="display: none; background: #236e14bd; padding: 0px; margin-bottom: 20px; text-align: center; font-size: 14px; transition: all 0.5s ease;"><p id="success_msg1" style="padding-bottom: 0%; font-size: large; font-weight: bold; color: white;"></p><br><p id="success_msg2" style="padding-top: 0%; padding-bottom: 0%; font-size: large; font-weight: bold; color: white;"></p></div>
-
+                  <fieldset id="disable_">
                   <div>
                     <div>
                       <input type="text" placeholder="Full Name" id="full_Names" />
                     </div>
                     <div>
-                      <input type="text" placeholder="Phone Number" id="phone_number" />
+                      <input type="number" placeholder="Phone Number" id="phone_number" />
                     </div>
                     <div>
                       <input type="email" placeholder="Email Address" id="email"/>
@@ -419,7 +456,16 @@ backend.
                         Send message
                       </button>
                     </div>
+                    
                   </div>
+                </fieldset>
+                  <div class="popup" id="popup">
+                    <img src="images/success.png" alt="">
+                    
+                    <h2>Thank You!</h2>
+                    <p id="success_msg2"></p>
+                    <button onclick="closePopup()">OK</button>
+                 </div>
                 </div>
               </div>
             </div>
@@ -470,6 +516,7 @@ backend.
     <script  src="js/bootstrap.js"></script>
 
     <script>
+      let popup = document.getElementById("popup");
       function openNav() {
         document.getElementById("myNav").style.width = "100%";
       }
@@ -480,6 +527,10 @@ backend.
       const isValidEmail = email => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+}
+function closePopup() {
+  popup.classList.remove("open-popup");
+  document.getElementById('disable_').disabled = false;
 }
 function validateForm() {
 
@@ -499,43 +550,54 @@ function validateForm() {
        const msgValue = regNo.value.trim();
        const contNoValue = contNo.value.trim();
 
+       //validation of input elements
        if(grpNameValue.length < 3){
         error_msg.style.padding = "10px"
+        document.getElementById("error_msg").style.display = "block";
        text = "Please enter a valid name!";
        error_msg.innerHTML = text;
         valid = false;
        }else if(contNoValue.length < 10){
         error_msg.style.padding = "10px"
+        document.getElementById("error_msg").style.display = "block";
        text = "Please enter a valid phone number!";
        error_msg.innerHTML = text;
         valid = false;
        }
        else if(!isValidEmail(grpEmailValue) || grpEmailValue.length < 3) {
         error_msg.style.padding = "10px"
+        document.getElementById("error_msg").style.display = "block";
         text = "Please enter a valid email!!";
         error_msg.innerHTML = text;
         valid = false
       } else if(msgValue.length < 3){
         error_msg.style.padding = "10px"
+        document.getElementById("error_msg").style.display = "block";
        text = "Please enter a valid message!";
        error_msg.innerHTML = text;
         valid = false;
        }else {
+        //hide the error element
         error_msg.style.padding = "0px";
-        document.getElementById("succ_msg").style.display = "block";
-        document.getElementById("succ_msg").style.padding = "10px";
         document.getElementById("error_msg").style.display = "none";
-        // success_msg1.style.padding = "10px"
-        // success_msg2.style.padding = "10px"
-       var text2 = "Hello! " + document.getElementById("full_Names").value + ", Thank you";
-       var text3 =  "Your message was sent successfully!";
-       success_msg1.innerHTML = text2;
-       success_msg2.innerHTML = text3
+        
+        //success message
+       var text2 = document.getElementById("full_Names").value + ", ";
+       var text3 =  text2 + "your message was sent successfully";
+        success_msg2.innerHTML = text3;
 
+        //open popup messege
+        popup.classList.add("open-popup");
+       
+       //Clear input values
+       document.getElementById('full_Names').value = "";
+       document.getElementById('email').value = "";
+       document.getElementById('input_message').value = "";
+       document.getElementById('phone_number').value = "";
+       document.getElementById('disable_').disabled = true;
        }
- 
-  return valid; // return the valid status
-  
+  // return the valid status
+  return valid; 
 }
     </script>
   </body>
